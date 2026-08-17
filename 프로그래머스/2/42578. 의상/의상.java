@@ -3,17 +3,15 @@ import java.util.*;
 
 class Solution {
     public int solution(String[][] clothes) {
-        int answer = 1;
-        
         HashMap<String, Integer> clo = new HashMap<>();
-        for(int i = 0; i < clothes.length; i++) {
-            String[] arr = clothes[i];
-            System.out.println(arr[1]);
-            clo.put(arr[1], clo.getOrDefault(arr[1], 1) + 1);
+        
+        for(String[] c : clothes) {
+            clo.put(c[1], clo.getOrDefault(c[1], 0) + 1);
         }
         
-        for(String key : clo.keySet()) {
-            answer *= clo.get(key);
+        int answer = 1;
+        for(String k : clo.keySet()) {
+            answer *= clo.get(k) + 1;
         }
         
         return answer - 1;
