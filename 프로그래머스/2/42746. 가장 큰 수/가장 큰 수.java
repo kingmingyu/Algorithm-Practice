@@ -3,27 +3,22 @@ import java.io.*;
 
 class Solution {
     public String solution(int[] numbers) {
-        StringBuilder answer = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
+        String[] nums = new String[numbers.length];
         
-        // Integer 배열로 변환
-        Integer[] nums = Arrays.stream(numbers).boxed().toArray(Integer[]::new);
+        for(int i = 0; i < numbers.length; i++) {
+            nums[i] = String.valueOf(numbers[i]);
+        }
         
-        Arrays.sort(nums, (Integer a, Integer b) -> {
-            String sa = String.valueOf(a);
-            String sb = String.valueOf(b);
-            
-            // 내림차순 정렬
-            return (sb+ sa).compareTo(sa + sb);
+        Arrays.sort(nums, (a, b) -> {
+            return (b+a).compareTo(a+b);
         });
         
-        for(int i : nums) {
-            answer.append(i);
+        if(nums[0].equals("0")) return "0";
+        for(String n : nums) {
+            sb.append(n);
         }
         
-        if(answer.charAt(0) == '0') {
-            return "0";
-        }
-        
-        return answer.toString();
+        return sb.toString();
     }
 }
