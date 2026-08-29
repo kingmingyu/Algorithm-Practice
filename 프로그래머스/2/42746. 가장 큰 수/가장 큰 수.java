@@ -4,21 +4,24 @@ import java.io.*;
 class Solution {
     public String solution(int[] numbers) {
         StringBuilder sb = new StringBuilder();
-        String[] nums = new String[numbers.length];
         
+        String[] strNums = new String[numbers.length];
         for(int i = 0; i < numbers.length; i++) {
-            nums[i] = String.valueOf(numbers[i]);
+            strNums[i] = String.valueOf(numbers[i]);
         }
         
-        Arrays.sort(nums, (a, b) -> {
-            return (b+a).compareTo(a+b);
+        Arrays.sort(strNums, (o1, o2) -> {
+            String o1o2 = o1+o2;
+            String o2o1 = o2+o1;
+            
+            return o2o1.compareTo(o1o2);
         });
         
-        if(nums[0].equals("0")) return "0";
-        for(String n : nums) {
-            sb.append(n);
+        for(String s : strNums) {
+            sb.append(s);
         }
         
+        if(sb.charAt(0) == '0') return "0";
         return sb.toString();
     }
 }
