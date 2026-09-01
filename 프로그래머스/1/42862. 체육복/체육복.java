@@ -3,33 +3,24 @@ import java.util.*;
 
 class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
-        int answer = 0;
-        int borrow = 0;
-        Arrays.sort(lost);
-        Arrays.sort(reserve);
+        int[] cnt = new int[n + 2];
+        for(int i = 1; i <= n; i++) cnt[i] = 1;
+        for(int l : lost) cnt[l] -= 1;
+        for(int r : reserve) cnt[r] += 1;
         
-        for(int i = 0; i < reserve.length; i++) {
-            for(int j = 0; j < lost.length; j++) {
-                if(reserve[i] == lost[j]) {
-                    reserve[i] = -1;
-                    lost[j] = -1;
-                    n += 1;
-                }
+        for(int i = 1; i <= n; i++) {
+            if(cnt[i] != 0) continue;
+            
+            if(cnt[i - 1] == 2) {
+                cnt[i-1] --; cnt[i]++;
+            }
+            else if (cnt[i+1] == 2) {
+                cnt[i+1] --; cnt[i]++;
             }
         }
         
-        for(int i = 0; i < reserve.length; i++) {
-            for(int j = 0; j < lost.length; j++) {
-                if(Math.abs(reserve[i] - lost[j]) == 1) {
-                    borrow++;
-                    reserve[i] = -1;
-                    lost[j] = -1;
-                }
-            }
-        }
-        
-        System.out.println("borrow: " + borrow);
-        System.out.println("lost: " + lost.length);
-        return n - lost.length + borrow;
+        int ans = 0;
+        for(int i = 1; i <= n; i++) if(cnt[i] >= 1) ans++;
+        return ans;
     }
 }
