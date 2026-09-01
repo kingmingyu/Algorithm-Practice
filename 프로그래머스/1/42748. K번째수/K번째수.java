@@ -3,17 +3,18 @@ import java.io.*;
 
 class Solution {
     public int[] solution(int[] array, int[][] commands) {
-        int[] answer = new int[commands.length];
         
-        for(int i = 0; i < commands.length; i++) {
-            int[] cur = commands[i];
+        int[] answer = new int[commands.length];
+        int i = 0;
+        for(int[] c : commands) {
+            int s = c[0]; int e = c[1]; int n = c[2];
             
-            List<Integer> idxArr = new ArrayList<>();
-            for(int j = cur[0] - 1; j < cur[1]; j++) {
-                idxArr.add(array[j]);
+            int[] cur = new int[e - s + 1];
+            for(int j = 0; j < e - s + 1; j++) {
+                cur[j] = array[j + s - 1];
             }
-            Collections.sort(idxArr);
-            answer[i] = idxArr.get(cur[2] - 1);
+            Arrays.sort(cur);
+            answer[i++] = cur[n - 1];
         }
         return answer;
     }
