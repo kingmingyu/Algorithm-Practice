@@ -5,13 +5,14 @@ class Solution {
     public long solution(int n, int[] times) {
         Arrays.sort(times);
         
-        long low = 1;
-        long high = (long) times[times.length - 1] * n;
-        long answer = 0;
+        long low = 0;
+        long high = (long)times[times.length - 1] * n;
+        long answer = high;
         
-        while(low <= high) {
+        while(high >= low) {
             long mid = (low + high) / 2;
-            if(CanFinish(mid, n, times)) {
+            
+            if(Check(mid, n, times)) {
                 answer = mid;
                 high = mid - 1;
             }
@@ -21,11 +22,13 @@ class Solution {
         }
         return answer;
     }
-    private boolean CanFinish(long time, int n, int[] times) {
-        long done = 0;
+    public static boolean Check(long time, int n, int[] times) {
+        long cnt = 0;
         for(int t : times) {
-            done += time / t;
-            if(done >= n) return true;
+            cnt += time / t;
+            if(cnt >= n) {
+                return true;
+            }
         }
         return false;
     }
