@@ -1,42 +1,32 @@
 import java.util.*;
-import java.io.*;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        int[] done = new int[speeds.length];
+        Deque<Integer> queue = new ArrayDeque<>();
         
         for(int i = 0; i < speeds.length; i++) {
-            if((100 - progresses[i]) % speeds[i] == 0) {
-                done[i] = (100 - progresses[i]) / speeds[i];
+            if((100 - progresses[i]) % speeds[i] > 0) {
+                queue.offer((100 - progresses[i]) / speeds[i] + 1);
             }
             else {
-                done[i] = (100 - progresses[i]) / speeds[i] + 1;
+                queue.offer((100 - progresses[i]) / speeds[i]);
             }
         }
         
-        Deque<Integer> queue = new LinkedList<>();
-        ArrayList<Integer> answerList = new ArrayList<>();
-        int cnt = 0;
-        for(int i : done) {
-            if(!queue.isEmpty()) {
-                if(queue.getLast() < i) {
-                    answerList.add(cnt);
-                    queue.poll();
-                    queue.add(i);
-                    cnt = 1;
-                }
-                else {
-                    cnt++;
-                }
-            }
-            else {
-                queue.add(i);
+        List<Integer> answerList = new ArrayList<>();
+        while(!queue.isEmpty()) {
+            int cur = queue.poll();
+            
+            int cnt = 1;
+            while(!queue.isEmpty() && cur >= queue.peek()) {
+                queue.poll();
                 cnt++;
             }
+            answerList.add(cnt);
         }
-        answerList.add(cnt);
+        
         int[] answer = new int[answerList.size()];
-        for(int i = 0; i < answerList.size(); i++) {
+        for(int i = 0; i < answer.length; i++) {
             answer[i] = answerList.get(i);
         }
         return answer;
