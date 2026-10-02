@@ -1,31 +1,24 @@
 import java.util.*;
-import java.io.*;
 
 class Solution {
     boolean solution(String s) {
-        
-        Deque<Character> queue = new LinkedList<>();
+        Deque<Character> stack = new ArrayDeque<>();
         
         for(int i = 0; i < s.length(); i++) {
             char cur = s.charAt(i);
+            
             if(cur == '(') {
-                queue.offer(cur);
+                stack.push(cur);
             }
             else {
-                if(!queue.isEmpty()) {
-                    if(queue.getLast() == '(') {
-                        queue.poll();
-                    }
+                if(!stack.isEmpty() && stack.peek() == '(') {
+                    stack.pop();
                 }
-                else {
-                    return false;
-                }
+                else return false;
             }
         }
-
-        if(!queue.isEmpty()) {
-            return false;
-        }
-        return true;
+        
+        if(stack.isEmpty()) return true;
+        return false;
     }
 }
