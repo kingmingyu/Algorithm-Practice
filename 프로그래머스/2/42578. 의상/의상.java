@@ -10,8 +10,8 @@ class Solution {
         }
         
         int answer = 1;
-        for(String k : cMap.keySet()) {
-            answer *= cMap.get(k) + 1; // 선택하지 않는 경우 +1
+        for(int i : cMap.values()) {
+            answer *= i + 1;
         }
         
         return answer - 1;
