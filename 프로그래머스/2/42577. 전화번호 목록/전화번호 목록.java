@@ -3,22 +3,18 @@ import java.util.*;
 
 class Solution {
     public boolean solution(String[] phone_book) {
-
-        HashSet<String> set = new HashSet<>();
+        Arrays.sort(phone_book, (o1, o2) -> {
+            return o1.length() - o2.length();
+        });
         
-        for(String cur : phone_book) {
-            set.add(cur);
-        }
-        
-        for(String cur : phone_book) {
-            for(int i = 0; i < cur.length(); i++) {
-                String sub = cur.substring(0,i);
-                if(set.contains(sub)) {
-                    return false;
-                }
+        HashSet<String> pSet = new HashSet<>();
+        for(String p : phone_book) {
+            for(int i = 0; i < p.length(); i++) {
+                String check = p.substring(0, i);
+                if(pSet.contains(check)) return false;
             }
+            pSet.add(p);
         }
-        
         return true;
     }
 }
