@@ -3,48 +3,44 @@ import java.io.*;
 
 class Solution {
     public int solution(String[] want, int[] number, String[] discount) {
-        // 슬라이딩 윈도우를 이용(10개 고정)
-        HashMap<String, Integer> target = new HashMap<>();
-        HashMap<String, Integer> curDis = new HashMap<>();
         
-        for(int i = 0; i < number.length; i++) {
-            target.put(want[i], number[i]);
+        HashMap<String, Integer> wMap = new HashMap<>();
+        for(int i = 0; i < want.length; i++) {
+            wMap.put(want[i], number[i]);
         }
         
-        // 초기 윈도우 설정
-        int s = 0;
-        int e = 0;
-        int result = 0;
+        // 처음 세팅
+        int answer = 0;
+        HashMap<String, Integer> curMap = new HashMap<>();
+        for(int i = 0; i < 10; i++) {
+            curMap.put(discount[i], curMap.getOrDefault(discount[i], 0) + 1);
+        }
+        if(check(curMap, wMap)) {
+            answer++;
+        }
         
-        while(e < discount.length) {
-            int targetCnt = target.getOrDefault(discount[e], 0);
-            int curDisCnt = curDis.getOrDefault(discount[e], 0);
+        for(int i = 0; i < discount.length - 10; i++) {
+            if(curMap.get(discount[i]) == 1) {
+                curMap.remove(discount[i]);
+            }
+            else {
+                curMap.put(discount[i], curMap.get(discount[i]) - 1);
+            }
+            curMap.put(discount[i+10], curMap.getOrDefault(discount[i+10], 0)+1);
             
-            // 담으려는 상품이 아닌 경우 건너뛰기
-            if(targetCnt == 0) {
-                s = e;
-                s++; e++;
-                curDis.clear();
-            }
-            // 담으려는 상품에 해당하는 경우
-            else{
-                // 더 담아야 하는경우(e를 더해 윈도우 크기를 늘림)
-                if(curDisCnt < targetCnt) {
-                    curDis.put(discount[e], curDisCnt + 1);
-                    
-                    // 정확히 10개의 상품을 담은 경우
-                    if(e - s == 9) {
-                        result++;
-                    }
-                    e++;
-                }
-                // 빼야하는 경우(s를 더해 윈도우 크기를 줄임)
-                else if (curDisCnt >= targetCnt) {
-                    curDis.put(discount[s], curDis.get(discount[s]) - 1);
-                    s++;
-                }
+            if(check(curMap, wMap)) {
+                answer++;
             }
         }
-        return result;
+        
+        return answer;
+    }
+    static boolean check(HashMap cur, HashMap want) {
+        for(Object key : cur.keySet()) {
+            if(cur.getOrDefault(key, 0) != want.getOrDefault(key, 0)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
