@@ -3,34 +3,35 @@ import java.io.*;
 
 class Solution {
     public int[] solution(String s) {
-        TreeMap<Integer, int[]> map = new TreeMap<>();
+        String[] sSetArr = s.substring(1, s.length()-1).split("\\{");
+        Arrays.sort(sSetArr, (o1, o2) -> {
+            return o1.length() - o2.length();
+        });
         
-        String[] sArr = s.substring(1, s.length()-1).split("\\{");
-        for(String a : sArr) {
-            if(a.equals("")) continue;
-            String aArr[] = a.split(",");
-            int intArr[] = new int[aArr.length];
-            int i = 0;
-            for(String aa : aArr) {
-                if(aa.charAt(aa.length()-1) == '}') 
-                    intArr[i++] = Integer.parseInt(aa.substring(0, aa.length() - 1));
-                else 
-                    intArr[i++] = Integer.parseInt(aa);
+        int[] answer = new int[sSetArr.length-1];
+        HashSet<Integer> isContains = new HashSet<>();
+        int idx = 0;
+        for(String arr : sSetArr) {
+            if(arr.isEmpty()) continue;
+            
+            String cur;
+            if(arr.charAt(arr.length()-1) == ',') {
+                cur = arr.substring(0, arr.length() -2);
             }
-            map.put(aArr.length, intArr);
-        }
-        
-        int[] answer = new int[map.size()];
-        HashSet<Integer> used = new HashSet<>();
-        int i = 0;
-        for(int[] arr : map.values()) {
-            for(int n : arr) {
-                if(!used.contains(n)) {
-                    answer[i++] = n;
-                    used.add(n);
+            else {
+                cur = arr.substring(0, arr.length() -1);
+            }
+            String[] curArr = cur.split(",");
+            for(String i : curArr) {
+                int curI = Integer.parseInt(i);
+                if(!isContains.contains(curI)) {
+                    answer[idx++] = curI;
+                    isContains.add(curI);
+                    break;
                 }
             }
         }
+        
         return answer;
     }
 }
